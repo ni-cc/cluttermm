@@ -1,0 +1,75 @@
+/* Copyright (C) 2011 The cluttermm Development Team
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free
+ * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+
+#include <glibmm/object.h>
+#include <cluttermm/scriptable.h>
+
+_DEFS(cluttermm,clutter)
+_PINCLUDE(glibmm/private/object_p.h)
+
+namespace Clutter
+{
+
+class Timeline;
+class ClutterAnimator;
+
+class State : public Glib::Object
+{
+  _CLASS_GOBJECT(State, ClutterState, CLUTTER_STATE, Glib::Object, GObject)
+  _IMPLEMENTS_INTERFACE(Scriptable)
+
+protected:
+  _CTOR_DEFAULT()
+
+public:
+  _WRAP_CREATE()
+
+  _IGNORE(clutter_state_set)
+  _WRAP_METHOD(Glib::RefPtr<ClutterTimeline> set_state(const Glib::ustring& target_state_name), clutter_state_set_state, refreturn) 
+  _WRAP_METHOD(Glib::ustring get_state(), clutter_state_get_state)
+  _WRAP_METHOD(Glib::RefPtr<ClutterTimeline> warp_to_state(const Glib::ustring& target_state_name), clutter_state_warp_to_state, refreturn)  
+  _WRAP_METHOD(Glib::RefPtr<State> set_key(const Glib::ustring& source_state_name, const Glib::ustring& target_state_name, const Glib::RefPtr<Glib::Object>& object, const Glib::ustring& property_name, guint mode, const Glib::ValueBase& value, double pre_delay, double post_delay), clutter_state_set_key, refreturn)
+  _WRAP_METHOD(Glib::RefPtr<const State> set_key(const Glib::ustring& source_state_name, const Glib::ustring& target_state_name, const Glib::RefPtr<Glib::Object>& object, const Glib::ustring& property_name, guint mode, const Glib::ValueBase& value, double pre_delay, double post_delay) const, clutter_state_set_key, refreturn, constversion)
+  _WRAP_METHOD(void remove_key(const Glib::ustring& source_state_name, const Glib::ustring& target_state_name, const Glib::RefPtr<Glib::Object>& object, const Glib::ustring& property_name), clutter_animator_remove_key)
+  // TODO: _WRAP_METHOD(std::vector<Glib::RefPtr<State> > get_keys(const Glib::ustring& source_state_name, const Glib::ustring& target_state_name, const Glib::RefPtr<Glib::Object>& object, const std::string &property_name), clutter_state_get_keys)
+  _IGNORE(clutter_state_get_keys)
+  _WRAP_METHOD(Glib::RefPtr<Timeline> get_timeline(), clutter_state_get_timeline, refreturn)
+  _WRAP_METHOD(void set_animator(const Glib::ustring& source_state_name, const Glib::ustring& target_state_name, const Glib::RefPtr<Animatot>& animator), clutter_state_set_animator)
+  _WRAP_METHOD(Glib::RefPtr<Animator> get_animator(const Glib::ustring& source_state_name, const Glib::ustring& target_state_name), clutter_state_get_animator, refreturn)
+  
+  _WRAP_METHOD(void set_duration(const Glib::ustring& source_state_name, const Glib::ustring& target_state_name, guint duration), clutter_state_set_duration)
+  _WRAP_METHOD(guint get_duration(const Glib::ustring& source_state_name, const Glib::ustring& target_state_name) const, clutter_state_get_duration)
+ 
+
+  // TODO: Decide if these are needed.
+  // _WRAP_METHOD(Glib::ustring get_source_state_name() const, clutter_state_key_get_source_state_name)
+  // _WRAP_METHOD(Glib::ustring get_target_state_name() const, clutter_state_key_get_target_state_name)
+  // _WRAP_METHOD(Glib::RefPtr<Glib::Object> get_object() const, clutter_state_key_get_object)
+  // _WRAP_METHOD(Glib::ustring get_property_name() const, clutter_state_key_get_property_name)
+  // _WRAP_METHOD(gulong get_mode() const, clutter_state_key_get_mode)
+  // _WRAP_METHOD(bool get_value(GValue *value) const, clutter_state_key_get_value)
+  // _WRAP_METHOD(GType get_property_type() const, clutter_state_key_get_property_type)
+  // _WRAP_METHOD(double get_pre_delay() const , clutter_state_key_get_pre_delay)
+  // _WRAP_METHOD(double get_post_delay() const , clutter_state_key_get_post_delay)
+
+  _WRAP_SIGNAL(void completed(), "completed")
+
+  _WRAP_PROPERTY("duration", guint)
+  _WRAP_PROPERTY("state", Glib::ustring)
+};
+
+} // namespace Clutter
